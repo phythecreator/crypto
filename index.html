@@ -3,212 +3,616 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Top 10 Crypto Rug Pulls</title>
+    <title>Forensic Finance: O Arquivo dos Colapsos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap');
-        body { font-family: 'Outfit', sans-serif; background-color: #0b0f19; color: #e2e8f0; }
-        .glass-panel { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        /* Scrollbar customizada para a lista lateral */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #0b0f19; }
-        ::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
-    </style>
-</head>
-<body class="h-screen flex flex-col overflow-hidden">
-
-    <header class="p-6 border-b border-slate-800 shrink-0">
-        <h1 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600 text-center">
-            O Cemitério das Criptomoedas: Top 10 Rug Pulls
-        </h1>
-        <p class="text-center text-slate-400 mt-2 text-sm">Explora as maiores fraudes da história. Seleciona um projeto abaixo para ver os detalhes.</p>
-    </header>
-
-    <main class="flex-1 flex overflow-hidden">
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&family=Public+Sans:wght@300;400;700;900&display=swap');
         
-        <aside class="w-1/3 max-w-sm border-r border-slate-800 overflow-y-auto p-4 space-y-3" id="rugPullList">
-            </aside>
-
-        <section class="flex-1 p-8 overflow-y-auto relative flex justify-center items-start">
-            <div id="detailsPanel" class="glass-panel p-8 rounded-2xl w-full max-w-3xl hidden shadow-2xl">
-                
-                <div class="flex justify-between items-start mb-6 border-b border-slate-700 pb-4">
-                    <div>
-                        <h2 id="rpName" class="text-4xl font-bold text-white mb-2">Nome</h2>
-                        <span id="rpLoss" class="px-3 py-1 bg-red-500/20 text-red-400 rounded-full font-semibold text-sm border border-red-500/30">Perda: $0</span>
-                    </div>
-                    <div class="w-48 h-24 bg-slate-900 rounded-lg p-2 border border-slate-700">
-                        <canvas id="miniChart"></canvas>
-                    </div>
-                </div>
-
-                <div class="space-y-6">
-                    <div>
-                        <h3 class="text-cyan-400 font-semibold uppercase tracking-wider text-sm mb-1">Quem está por trás?</h3>
-                        <p id="rpWho" class="text-lg bg-slate-800/50 p-3 rounded border border-slate-700"></p>
-                    </div>
-
-                    <div>
-                        <h3 class="text-cyan-400 font-semibold uppercase tracking-wider text-sm mb-1">O que aconteceu?</h3>
-                        <p id="rpStory" class="text-slate-300 leading-relaxed"></p>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4 mt-6">
-                        <div class="bg-slate-800/80 p-4 rounded-lg text-center border border-slate-700">
-                            <span class="block text-slate-400 text-sm">Preço Máximo</span>
-                            <span id="rpPeak" class="text-2xl font-bold text-green-400"></span>
-                        </div>
-                        <div class="bg-slate-800/80 p-4 rounded-lg text-center border border-slate-700">
-                            <span class="block text-slate-400 text-sm">Preço Pós-Crash</span>
-                            <span id="rpCrash" class="text-2xl font-bold text-red-500"></span>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-            
-            <div id="emptyState" class="text-slate-500 text-xl font-light mt-20">
-                Selecione um projeto na lista lateral.
-            </div>
-        </section>
-    </main>
-
-    <script>
-        // Dados dos 10 Maiores Rug Pulls / Fraudes
-        const rugPulls = [
-            {
-                name: "OneCoin", loss: "4 Mil Milhões $", peak: "$29.95 (Falso)", crash: "$0.00",
-                who: "Ruja Ignatova ('Cryptoqueen')",
-                story: "Vendido como a 'assassina do Bitcoin', o OneCoin nunca teve sequer uma blockchain verdadeira. Era um esquema em pirâmide multinível clássico. Ruja Ignatova desapareceu em 2017 com milhares de milhões e continua na lista dos mais procurados do FBI.",
-                chartData: [0, 5, 15, 29.95, 0]
-            },
-            {
-                name: "BitConnect", loss: "2.4 Mil Milhões $", peak: "$463.31", crash: "$0.67",
-                who: "Satish Kumbhani & Promotores",
-                story: "Prometia rendimentos garantidos de até 1% ao dia gerados por um misterioso 'bot de trading'. Assim que os reguladores americanos emitiram avisos de que era um esquema Ponzi, os fundadores encerraram a plataforma e o token colapsou em poucas horas.",
-                chartData: [10, 150, 300, 463, 0.67]
-            },
-            {
-                name: "Thodex", loss: "2 Mil Milhões $", peak: "N/A (Cofres da Exchange)", crash: "0 (Fundos Roubados)",
-                who: "Faruk Fatih Özer",
-                story: "Uma das maiores corretoras de criptomoedas da Turquia. Em 2021, a plataforma suspendeu os levantamentos sob a desculpa de uma 'parceria externa'. O CEO fugiu para a Albânia com as chaves das carteiras que continham os fundos de cerca de 400.000 utilizadores.",
-                chartData: [0, 100, 150, 200, 0] // Representação de fundos acumulados vs roubo
-            },
-            {
-                name: "PlusToken", loss: "2.9 Mil Milhões $", peak: "$348.00", crash: "$0.00",
-                who: "Chen Bo e equipa",
-                story: "Uma carteira cripto sul-coreana/chinesa que prometia retornos absurdos. Atraiu milhões de investidores na Ásia. Em 2019, os fundadores tentaram transferir e branquear milhares de Bitcoins e Ethereum antes de serem detidos pelas autoridades.",
-                chartData: [5, 50, 150, 348, 0]
-            },
-            {
-                name: "Squid Game Token", loss: "3.3 Milhões $", peak: "$2,861.80", crash: "$0.0007",
-                who: "Desenvolvedores Anónimos",
-                story: "Aproveitando a febre da série da Netflix, criaram um token de jogo. O contrato tinha uma cláusula 'anti-dump': os utilizadores podiam comprar, mas não vender. O preço disparou para quase 3000 dólares até os criadores drenarem a liquidez (Rug Pull puro).",
-                chartData: [0.01, 10, 500, 2861, 0.0007]
-            },
-            {
-                name: "Africrypt", loss: "3.6 Mil Milhões $", peak: "N/A (Fundos Investidos)", crash: "$0",
-                who: "Irmãos Raees e Ameer Cajee",
-                story: "Os fundadores desta plataforma de investimento sul-africana alegaram que o sistema foi hackeado e pediram aos clientes para não contactarem a polícia para 'não atrasar a recuperação'. Pouco depois, desapareceram com 69.000 Bitcoins.",
-                chartData: [0, 20, 50, 100, 0]
-            },
-            {
-                name: "AnubisDAO", loss: "60 Milhões $", peak: "$1,000+ (Estimado)", crash: "$0.00",
-                who: "Desenvolvedores Anónimos",
-                story: "Promovido como uma bifurcação do OlympusDAO usando a imagem do Deus Anúbis (com aspeto de cão). Arrecadaram 60 milhões de dólares em Ethereum numa venda inicial. Apenas 20 horas depois, todos os fundos foram drenados da pool de liquidez.",
-                chartData: [0, 500, 1000, 1000, 0]
-            },
-            {
-                name: "Snowdog DAO", loss: "30 Milhões $", peak: "$1,200.00", crash: "$54.00",
-                who: "Equipa Anónima",
-                story: "Prometeram um 'buyback' (recompra) massivo durante 8 dias. No momento em que o buyback aconteceu, uma única carteira (provavelmente dos criadores) conseguiu vender os seus tokens antes de toda a gente, drenando o dinheiro que supostamente ia salvar o projeto.",
-                chartData: [100, 300, 800, 1200, 54]
-            },
-            {
-                name: "Frosties (NFT)", loss: "1.1 Milhões $", peak: "0.04 ETH (Mint)", crash: "0.00 ETH",
-                who: "Ethan Nguyen & Andre Llacuna",
-                story: "Um projeto de NFTs que prometia jogos, merchandise e recompensas. Logo após venderem todos os 8.888 NFTs (arrecadando mais de 1 milhão de dólares), desativaram o Discord e o site, transferindo os fundos para várias carteiras. Foram mais tarde presos.",
-                chartData: [0, 0.01, 0.02, 0.04, 0]
-            },
-            {
-                name: "Mutant Ape Planet", loss: "2.9 Milhões $", peak: "Centenas de dólares/NFT", crash: "Quase $0",
-                who: "Aurelien Michel",
-                story: "O criador lançou uma coleção de NFTs imitando os famosos Bored Apes, prometendo passatempos, tokens e produtos físicos. Após embolsar quase 3 milhões de dólares, admitiu na comunidade: 'Nós não planeávamos fazer um rug pull, mas a comunidade tornou-se tóxica'. Foi preso em Nova Iorque.",
-                chartData: [0, 50, 150, 300, 0]
-            }
-        ];
-
-        let currentChart = null;
-
-        // Gerar a lista lateral
-        const listContainer = document.getElementById('rugPullList');
-        rugPulls.forEach((item, index) => {
-            const btn = document.createElement('button');
-            btn.className = "w-full text-left p-4 rounded-xl bg-slate-800/50 hover:bg-slate-700/80 border border-slate-700 hover:border-cyan-500 transition duration-300 group";
-            btn.innerHTML = `
-                <div class="flex justify-between items-center">
-                    <span class="font-bold text-lg text-white group-hover:text-cyan-400 transition">${index + 1}. ${item.name}</span>
-                    <span class="text-xs font-semibold px-2 py-1 bg-slate-900 rounded text-slate-400">Ver</span>
-                </div>
-                <div class="text-sm text-red-400 mt-1">Perda: ${item.loss}</div>
-            `;
-            btn.onclick = () => showDetails(index);
-            listContainer.appendChild(btn);
-        });
-
-        function showDetails(index) {
-            const item = rugPulls[index];
-            
-            // Mostrar painel, esconder estado vazio
-            document.getElementById('emptyState').classList.add('hidden');
-            document.getElementById('detailsPanel').classList.remove('hidden');
-
-            // Preencher dados
-            document.getElementById('rpName').innerText = item.name;
-            document.getElementById('rpLoss').innerText = "Perda Total: " + item.loss;
-            document.getElementById('rpWho').innerText = item.who;
-            document.getElementById('rpStory').innerText = item.story;
-            document.getElementById('rpPeak').innerText = item.peak;
-            document.getElementById('rpCrash').innerText = item.crash;
-
-            // Atualizar Gráfico Pequeno
-            drawMiniChart(item.chartData);
+        :root {
+            --bg-dark: #05070a;
+            --panel-bg: #0d1117;
+            --accent-blue: #3b82f6;
+            --accent-red: #ef4444;
+            --accent-green: #22c55e;
+            --text-main: #e6edf3;
         }
 
-        function drawMiniChart(dataPoints) {
-            const ctx = document.getElementById('miniChart').getContext('2d');
-            
-            // Destruir gráfico anterior se existir
-            if(currentChart) { currentChart.destroy(); }
+        body { 
+            font-family: 'Public Sans', sans-serif; 
+            background-color: var(--bg-dark); 
+            color: var(--text-main);
+            overflow: hidden;
+        }
 
-            currentChart = new Chart(ctx, {
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        
+        .sidebar-scroll::-webkit-scrollbar { width: 4px; }
+        .sidebar-scroll::-webkit-scrollbar-thumb { background: #30363d; border-radius: 10px; }
+
+        .card-active {
+            border-left: 4px solid var(--accent-blue);
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.1) 0%, rgba(13, 17, 23, 0) 100%);
+        }
+
+        .red-flag-box {
+            border-left: 3px solid var(--accent-red);
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .status-badge {
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        @keyframes pulse-red {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        .live-indicator { animation: pulse-red 2s infinite; }
+    </style>
+</head>
+<body class="h-screen flex flex-col">
+
+    <nav class="h-16 border-b border-gray-800 flex items-center justify-between px-8 bg-[#0d1117] z-50">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-blue-600 rounded flex items-center justify-center">
+                <i class="fa-solid fa-chart-line text-white"></i>
+            </div>
+            <span class="text-xl font-black tracking-tighter uppercase italic">Forensic<span class="text-blue-500">Finance</span></span>
+        </div>
+        <div class="flex gap-6 text-sm font-bold uppercase tracking-widest">
+            <button onclick="switchCategory('crypto')" id="nav-crypto" class="text-blue-500 border-b-2 border-blue-500 pb-1">Criptomoedas</button>
+            <button onclick="switchCategory('stocks')" id="nav-stocks" class="text-gray-500 hover:text-white transition">Ações (20 Anos)</button>
+            <button onclick="openQuiz()" class="text-gray-500 hover:text-white transition">O Mini-Quiz</button>
+        </div>
+    </nav>
+
+    <div class="flex flex-1 overflow-hidden">
+        
+        <aside class="w-80 border-r border-gray-800 flex flex-col bg-[#0d1117]">
+            <div class="p-4 border-b border-gray-800 bg-[#161b22]">
+                <h2 class="text-xs font-bold text-gray-500 uppercase">Lista de Incidentes</h2>
+            </div>
+            <div id="sidebar-list" class="flex-1 overflow-y-auto sidebar-scroll">
+                </div>
+        </aside>
+
+        <main class="flex-1 overflow-y-auto bg-[#05070a] p-8 sidebar-scroll" id="main-view">
+            
+            <div id="empty-state" class="h-full flex flex-col items-center justify-center text-gray-600">
+                <i class="fa-solid fa-magnifying-glass-chart text-6xl mb-4"></i>
+                <p class="text-xl">Selecione um caso para iniciar a auditoria forense.</p>
+            </div>
+
+            <div id="content-display" class="hidden">
+                <div class="flex justify-between items-start mb-8">
+                    <div>
+                        <div class="flex items-center gap-3 mb-2">
+                            <h1 id="display-name" class="text-5xl font-black text-white italic uppercase">NOME</h1>
+                            <span id="display-status" class="status-badge"></span>
+                        </div>
+                        <p id="display-subtitle" class="text-gray-400 text-lg"></p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xs font-bold text-gray-500 uppercase">Perda Estimada</span>
+                        <div id="display-loss" class="text-4xl font-bold text-red-500 mono"></div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-6 mb-8">
+                    <div class="col-span-2 bg-[#0d1117] p-6 rounded-xl border border-gray-800">
+                        <h3 class="text-sm font-bold text-gray-500 uppercase mb-4 italic"><i class="fa-solid fa-timeline mr-2"></i>Histórico de Preço / Colapso</h3>
+                        <div class="h-80 w-full">
+                            <canvas id="mainChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="col-span-1 space-y-4">
+                        <div class="bg-[#161b22] p-4 rounded-xl border border-gray-700">
+                            <h4 class="text-xs font-bold text-blue-400 uppercase mb-2">O Preço Máximo (ATH)</h4>
+                            <div id="display-peak" class="text-2xl font-bold text-white mono"></div>
+                        </div>
+                        <div class="bg-[#161b22] p-4 rounded-xl border border-gray-700">
+                            <h4 class="text-xs font-bold text-red-400 uppercase mb-2">Pós-Desastre</h4>
+                            <div id="display-bottom" class="text-2xl font-bold text-white mono"></div>
+                        </div>
+                        <div class="bg-[#161b22] p-4 rounded-xl border border-gray-700">
+                            <h4 class="text-xs font-bold text-gray-400 uppercase mb-2">Tempo de Queda</h4>
+                            <div id="display-duration" class="text-xl font-bold text-white uppercase italic"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-8">
+                    <div class="space-y-6">
+                        <section>
+                            <h3 class="text-xl font-bold mb-3 border-b border-gray-800 pb-2 text-blue-400 underline decoration-2 underline-offset-8">A História</h3>
+                            <p id="display-story" class="text-gray-300 leading-relaxed text-lg"></p>
+                        </section>
+                        
+                        <section class="red-flag-box p-4 rounded-r-lg">
+                            <h3 class="text-sm font-black text-red-500 uppercase mb-2 tracking-widest italic"><i class="fa-solid fa-triangle-exclamation mr-2"></i>Sinais de Alerta (Red Flags)</h3>
+                            <ul id="display-redflags" class="list-disc list-inside text-gray-400 space-y-2 text-sm italic">
+                                </ul>
+                        </section>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="bg-gray-900/40 p-6 rounded-2xl border border-gray-800">
+                            <h3 class="text-lg font-bold mb-4 text-white uppercase italic">Análise de Responsabilidade</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <span class="text-xs font-bold text-gray-500 uppercase block">Mentores / Responsáveis</span>
+                                    <p id="display-who" class="text-white font-bold text-xl"></p>
+                                </div>
+                                <div>
+                                    <span class="text-xs font-bold text-gray-500 uppercase block">Consequências Legais</span>
+                                    <p id="display-sentence" class="text-gray-300 italic"></p>
+                                </div>
+                                <div class="pt-4 border-t border-gray-800">
+                                    <span class="text-xs font-bold text-gray-500 uppercase block mb-2">Impacto no Setor</span>
+                                    <p id="display-impact" class="text-sm text-gray-400"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="quiz-view" class="hidden max-w-2xl mx-auto py-10">
+                <h2 class="text-4xl font-black mb-6 italic uppercase">Detetor de Fraudes</h2>
+                <div id="quiz-container" class="bg-[#0d1117] p-8 rounded-2xl border border-blue-900/30">
+                    </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // DATA OBJECTS
+        const data = {
+            crypto: [
+                {
+                    id: "onecoin",
+                    name: "OneCoin",
+                    subtitle: "O maior esquema Ponzi da história cripto",
+                    loss: "$4.0 Mil Milhões",
+                    status: "Dead",
+                    peak: "$29.95",
+                    bottom: "$0.00",
+                    duration: "4 Anos",
+                    who: "Ruja Ignatova (Cryptoqueen)",
+                    story: "Vendido como a 'Bitcoin Killer', o OneCoin operava sem uma blockchain real. Era um sistema de marketing multinível onde o 'valor' vinha apenas do recrutamento de novos membros. A tecnologia era inexistente.",
+                    redflags: [
+                        "Código fonte nunca foi publicado ou auditado.",
+                        "Promessas de lucro garantido sem volatilidade.",
+                        "A blockchain era na verdade uma base de dados SQL simples.",
+                        "Fundadora desapareceu subitamente antes do colapso."
+                    ],
+                    sentence: "Ruja Ignatova está na lista dos 10 mais procurados do FBI. O seu co-fundador Karl Greenwood foi condenado a 20 anos de prisão em 2023.",
+                    impact: "Destruiu a reputação da cripto em países em desenvolvimento e forçou regulamentações mais rígidas sobre MLM.",
+                    chart: [1, 5, 12, 25, 29.95, 0]
+                },
+                {
+                    id: "bitconnect",
+                    name: "BitConnect",
+                    subtitle: "O bot de trading inexistente",
+                    loss: "$2.4 Mil Milhões",
+                    status: "Dead",
+                    peak: "$463.31",
+                    bottom: "$0.67",
+                    duration: "18 Meses",
+                    who: "Satish Kumbhani",
+                    story: "BitConnect era uma plataforma de empréstimos que prometia retornos de 1% ao dia via 'Volatility Software'. No auge, era uma das 20 maiores moedas por valor de mercado.",
+                    redflags: [
+                        "Rendimentos diários matematicamente impossíveis.",
+                        "Sistema de bónus de recomendação agressivo.",
+                        "Avisos de reguladores (Texas e Carolina do Norte) ignorados pela comunidade.",
+                        "Marketing baseado em eventos de 'culto' e gritos de euforia."
+                    ],
+                    sentence: "Kumbhani foi indiciado por fraude mas permanece foragido. Vários promotores do YouTube foram multados pela SEC.",
+                    impact: "Criou o termo 'Hey Hey Hey' como um meme de alerta para futuros golpes.",
+                    chart: [10, 80, 200, 463, 150, 0.67]
+                },
+                {
+                    id: "squid",
+                    name: "Squid Game",
+                    subtitle: "O Rug Pull de liquidez bloqueada",
+                    loss: "$3.3 Milhões",
+                    status: "Rug Pulled",
+                    peak: "$2,861.80",
+                    bottom: "$0.0007",
+                    duration: "7 Dias",
+                    who: "Equipa Anónima",
+                    story: "Um token 'Play-to-Earn' inspirado na série da Netflix. Ganhou tração viral nos media tradicionais, o que empurrou o preço de cêntimos para milhares de dólares em tempo recorde.",
+                    redflags: [
+                        "Cláusula no contrato que impedia os utilizadores de vender (Antidump).",
+                        "Erros gramaticais graves no Whitepaper.",
+                        "Sem afiliação oficial com a Netflix.",
+                        "Fundadores anónimos sem histórico no GitHub."
+                    ],
+                    sentence: "Ninguém foi preso. Os criadores utilizaram o Tornado Cash para ocultar os fundos e desapareceram.",
+                    impact: "Avisou o mundo que até as notícias da BBC/CNBC podem inadvertidamente promover golpes cripto.",
+                    chart: [0.01, 1, 50, 600, 2861, 0]
+                },
+                {
+                    id: "thodex",
+                    name: "Thodex",
+                    subtitle: "A fuga do CEO",
+                    loss: "$2.0 Mil Milhões",
+                    status: "Liquidado",
+                    peak: "N/A",
+                    bottom: "$0",
+                    duration: "48 Horas",
+                    who: "Faruk Fatih Özer",
+                    story: "Uma grande corretora turca que de repente parou os levantamentos. O CEO alegou problemas técnicos e fugiu para a Albânia com as chaves privadas dos clientes.",
+                    redflags: [
+                        "Campanhas de marketing excessivas oferecendo Porsches grátis.",
+                        "Atrasos frequentes em levantamentos pequenos antes do crash.",
+                        "Concentração absoluta de poder nas mãos do CEO."
+                    ],
+                    sentence: "Özer foi extraditado e condenado na Turquia a inacreditáveis 11.196 anos de prisão em 2023.",
+                    impact: "Levou a Turquia a proibir pagamentos com criptomoedas durante um longo período.",
+                    chart: [100, 105, 110, 108, 0, 0]
+                },
+                {
+                    id: "celsius",
+                    name: "Celsius Network",
+                    subtitle: "O banco que 'não era banco'",
+                    loss: "$4.7 Mil Milhões",
+                    status: "Bankruptcy",
+                    peak: "$8.02",
+                    bottom: "$0.12",
+                    duration: "6 Meses",
+                    who: "Alex Mashinsky",
+                    story: "Prometia 'bancar os desbancados' oferecendo juros altos em depósitos cripto. Na verdade, usava os fundos dos clientes em apostas de alto risco em DeFi.",
+                    redflags: [
+                        "O CEO vendia os seus próprios tokens enquanto dizia aos clientes para comprar.",
+                        "Termos de serviço que diziam que os utilizadores não eram donos das suas moedas.",
+                        "Opacidade total sobre onde os rendimentos eram gerados."
+                    ],
+                    sentence: "Mashinsky foi preso em 2023 sob acusações de fraude de títulos e manipulação de mercado. Aguarda julgamento.",
+                    impact: "Mudou o mantra do mercado para: 'Not your keys, not your coins'.",
+                    chart: [0.5, 3, 7, 8, 2, 0.2]
+                },
+                {
+                    id: "ftx",
+                    name: "FTX / FTT",
+                    subtitle: "A queda do império de SBF",
+                    loss: "$8.0 Mil Milhões",
+                    status: "Collapse",
+                    peak: "$85.00 (FTT)",
+                    bottom: "$1.20",
+                    duration: "10 Dias",
+                    who: "Sam Bankman-Fried",
+                    story: "A segunda maior corretora do mundo usava fundos de clientes para cobrir prejuízos da sua empresa parceira, Alameda Research. Um 'buraco' financeiro massivo que implodiu em novembro de 2022.",
+                    redflags: [
+                        "Falta de um conselho de administração independente.",
+                        "Uso de software de contabilidade (QuickBooks) para gerir mil milhões.",
+                        "Relações pessoais próximas entre os executivos e reguladores.",
+                        "Empréstimos de mil milhões ao próprio CEO."
+                    ],
+                    sentence: "SBF foi condenado a 25 anos de prisão federal em 2024.",
+                    impact: "O maior golpe de confiança na história da indústria cripto.",
+                    chart: [10, 40, 60, 85, 20, 1]
+                },
+                {
+                    id: "terraluna",
+                    name: "Terra (LUNA)",
+                    subtitle: "O espiral da morte algorítmico",
+                    loss: "$40.0 Mil Milhões",
+                    status: "Relaunched (Old Dead)",
+                    peak: "$119.18",
+                    bottom: "$0.0001",
+                    duration: "4 Dias",
+                    who: "Do Kwon",
+                    story: "Uma stablecoin (UST) que mantinha o valor através de um algoritmo ligado ao token LUNA. Quando o UST perdeu o valor de $1, o sistema imprimiu triliões de LUNA, destruindo o valor de ambos.",
+                    redflags: [
+                        "Críticos avisaram durante anos sobre o 'espiral da morte'.",
+                        "O fundador atacava arrogantemente qualquer pessoa que questionasse o modelo.",
+                        "Dependência excessiva de uma única aplicação (Anchor Protocol)."
+                    ],
+                    sentence: "Do Kwon foi preso em Montenegro por viajar com passaporte falso. Enfrenta extradição para os EUA ou Coreia do Sul.",
+                    impact: "Provocou um 'inverno cripto' que durou mais de um ano.",
+                    chart: [1, 20, 80, 119, 10, 0.0001]
+                },
+                {
+                    id: "africrypt",
+                    name: "Africrypt",
+                    subtitle: "O roubo silencioso",
+                    loss: "$3.6 Mil Milhões",
+                    status: "Dead",
+                    peak: "N/A",
+                    bottom: "$0",
+                    duration: "1 Mês",
+                    who: "Ameer e Raees Cajee",
+                    story: "Plataforma sul-africana de investimento. Os irmãos alegaram um hack e pediram aos investidores para não alertarem as autoridades, pois isso 'atrapalharia a recuperação'. Depois fugiram.",
+                    redflags: [
+                        "Promessa de retornos de 10% ao dia.",
+                        "Pedido de segredo após o alegado 'hack'.",
+                        "Estrutura corporativa opaca e jovem demais para o capital gerido."
+                    ],
+                    sentence: "Irmãos Cajee continuam desaparecidos. Suspeita-se que estejam em Vanuatu ou Dubai.",
+                    impact: "Acelerou leis de cripto na África do Sul.",
+                    chart: [10, 20, 50, 100, 0, 0]
+                },
+                {
+                    id: "anubis",
+                    name: "AnubisDAO",
+                    subtitle: "O Rug Pull de 20 horas",
+                    loss: "$60 Milhões",
+                    status: "Dead",
+                    peak: "$1,000+",
+                    bottom: "$0",
+                    duration: "20 Horas",
+                    who: "Desenvolvedores Anónimos (Sisyphus suspeito)",
+                    story: "Um fork do OlympusDAO lançado no Twitter. Arrecadou fundos em ETH e, sem aviso, a liquidez foi removida da pool.",
+                    redflags: [
+                        "Nenhum site oficial, apenas uma conta de Twitter e um contrato.",
+                        "Venda de tokens sem limites de contribuição.",
+                        "Dependência total de confiança em 'KOLs' (influenciadores)."
+                    ],
+                    sentence: "Sem prisões. O autor permanece anónimo, tendo lavado o dinheiro através de mixers.",
+                    impact: "Mostrou o perigo da 'DeFi Summer' onde investidores compravam qualquer coisa com imagem de cão.",
+                    chart: [0, 500, 1000, 50, 0, 0]
+                },
+                {
+                    id: "plustoken",
+                    name: "PlusToken",
+                    subtitle: "A pirâmide asiática",
+                    loss: "$3.0 Mil Milhões",
+                    status: "Dead",
+                    peak: "$350.00",
+                    bottom: "$0.00",
+                    duration: "1 Ano",
+                    who: "Chen Bo e outros",
+                    story: "Uma carteira cripto que prometia juros altos. Popular na China e Coreia. Os fundos foram usados para sustentar o estilo de vida de luxo dos fundadores.",
+                    redflags: [
+                        "Obrigatoriedade de convidar novos membros para sacar fundos.",
+                        "App não disponível em lojas oficiais (Google/Apple).",
+                        "Dificuldades técnicas constantes em dias de baixa no mercado."
+                    ],
+                    sentence: "O governo chinês confiscou $4 mil milhões em cripto e prendeu 27 líderes do esquema.",
+                    impact: "Um dos maiores despejos de Bitcoin no mercado aberto, causando quedas de preço em 2019.",
+                    chart: [10, 100, 250, 350, 50, 0]
+                }
+            ],
+            stocks: [
+                {
+                    id: "wirecard",
+                    name: "Wirecard",
+                    subtitle: "O escândalo do buraco de 1.9 mil milhões",
+                    loss: "€12.5 Mil Milhões (Market Cap)",
+                    status: "Insolvente",
+                    peak: "€191.00",
+                    bottom: "€0.30",
+                    duration: "7 Dias",
+                    who: "Jan Marsalek & Markus Braun",
+                    story: "A estrela das Fintechs alemãs que alegou ter 1.9 mil milhões de euros em bancos nas Filipinas. Os bancos confirmaram que o dinheiro nunca existiu.",
+                    redflags: [
+                        "Investigações do Financial Times ignoradas pelo regulador alemão (BaFin).",
+                        "Contabilidade agressiva e lucros vindos de parceiros obscuros.",
+                        "O regulador alemão processou os jornalistas que denunciavam a fraude."
+                    ],
+                    sentence: "Markus Braun está preso. Jan Marsalek fugiu para a Rússia e é suspeito de ser espião russo.",
+                    impact: "O maior vexame financeiro da história da Alemanha.",
+                    chart: [100, 150, 191, 140, 2, 0.3]
+                },
+                {
+                    id: "lehman",
+                    name: "Lehman Brothers",
+                    subtitle: "O detonador da crise de 2008",
+                    loss: "$600 Mil Milhões (Ativos)",
+                    status: "Falência",
+                    peak: "$86.00",
+                    bottom: "$0.00",
+                    duration: "12 Meses",
+                    who: "Richard Fuld",
+                    story: "O banco de investimento estava carregado de títulos de hipotecas 'subprime' podres. Quando o imobiliário caiu, o banco ficou sem liquidez.",
+                    redflags: [
+                        "Alavancagem extrema (31 para 1).",
+                        "Uso de truques contabilísticos (Repo 105) para esconder dívida.",
+                        "Recusa em aceitar capital externo quando ainda havia tempo."
+                    ],
+                    sentence: "Richard Fuld nunca foi preso, embora tenha sido duramente criticado pelo Congresso.",
+                    impact: "Quase causou o colapso total do sistema financeiro mundial.",
+                    chart: [70, 86, 60, 40, 10, 0]
+                },
+                {
+                    id: "svb",
+                    name: "Silicon Valley Bank",
+                    subtitle: "A corrida bancária digital",
+                    loss: "$200 Mil Milhões (Ativos)",
+                    status: "Fechado / Adquirido",
+                    peak: "$700.00",
+                    bottom: "$0.00",
+                    duration: "48 Horas",
+                    who: "Greg Becker",
+                    story: "O banco dos fundadores de tecnologia. Comprou títulos de longo prazo com juros baixos. Quando as taxas subiram, os títulos desvalorizaram e o banco colapsou numa corrida aos levantamentos via iPhone.",
+                    redflags: [
+                        "Falta de um Chief Risk Officer durante quase um ano.",
+                        "Concentração extrema num único setor (Tech).",
+                        "Venda de ações pelo CEO dias antes do colapso."
+                    ],
+                    sentence: "Investigado pela SEC e pelo Departamento de Justiça, mas sem condenações criminais até agora.",
+                    impact: "Mostrou a velocidade com que o Twitter e a banca digital podem destruir um banco.",
+                    chart: [200, 450, 700, 500, 200, 0]
+                }
+            ]
+        };
+
+        let currentCategory = 'crypto';
+        let chartInstance = null;
+
+        // INITIALIZE
+        function init() {
+            renderList();
+        }
+
+        function switchCategory(cat) {
+            currentCategory = cat;
+            document.getElementById('nav-crypto').className = cat === 'crypto' ? 'text-blue-500 border-b-2 border-blue-500 pb-1' : 'text-gray-500 hover:text-white transition';
+            document.getElementById('nav-stocks').className = cat === 'stocks' ? 'text-blue-500 border-b-2 border-blue-500 pb-1' : 'text-gray-500 hover:text-white transition';
+            
+            document.getElementById('quiz-view').classList.add('hidden');
+            document.getElementById('main-view').classList.remove('hidden');
+            document.getElementById('content-display').classList.add('hidden');
+            document.getElementById('empty-state').classList.remove('hidden');
+            
+            renderList();
+        }
+
+        function renderList() {
+            const list = document.getElementById('sidebar-list');
+            list.innerHTML = '';
+            
+            data[currentCategory].forEach(item => {
+                const div = document.createElement('div');
+                div.className = "p-4 border-b border-gray-800 cursor-pointer hover:bg-[#1c2128] transition group relative";
+                div.id = `card-${item.id}`;
+                div.onclick = () => showDetail(item.id);
+                
+                div.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <span class="text-xs font-mono text-blue-500 mb-1 block">${item.id.toUpperCase()}</span>
+                        <span class="text-[10px] text-gray-500">${item.duration}</span>
+                    </div>
+                    <h3 class="font-bold text-gray-200 group-hover:text-white transition">${item.name}</h3>
+                    <div class="flex justify-between items-center mt-2">
+                        <span class="text-xs text-red-400 font-bold">${item.loss}</span>
+                        <i class="fa-solid fa-chevron-right text-[10px] text-gray-700 group-hover:text-blue-500"></i>
+                    </div>
+                `;
+                list.appendChild(div);
+            });
+        }
+
+        function showDetail(id) {
+            const item = data[currentCategory].find(i => i.id === id);
+            
+            // UI States
+            document.getElementById('empty-state').classList.add('hidden');
+            document.getElementById('content-display').classList.remove('hidden');
+            
+            // Remove active states
+            document.querySelectorAll('#sidebar-list div').forEach(d => d.classList.remove('card-active'));
+            document.getElementById(`card-${id}`).classList.add('card-active');
+
+            // Fill Data
+            document.getElementById('display-name').innerText = item.name;
+            document.getElementById('display-subtitle').innerText = item.subtitle;
+            document.getElementById('display-loss').innerText = item.loss;
+            document.getElementById('display-peak').innerText = item.peak;
+            document.getElementById('display-bottom').innerText = item.bottom;
+            document.getElementById('display-duration').innerText = item.duration;
+            document.getElementById('display-story').innerText = item.story;
+            document.getElementById('display-who').innerText = item.who;
+            document.getElementById('display-sentence').innerText = item.sentence;
+            document.getElementById('display-impact').innerText = item.impact;
+
+            const status = document.getElementById('display-status');
+            status.innerText = item.status;
+            status.className = `status-badge ${item.status === 'Dead' || item.status === 'Collapse' ? 'bg-red-500/20 text-red-500' : 'bg-yellow-500/20 text-yellow-500'}`;
+
+            // Red Flags
+            const flagList = document.getElementById('display-redflags');
+            flagList.innerHTML = '';
+            item.redflags.forEach(flag => {
+                const li = document.createElement('li');
+                li.innerText = flag;
+                flagList.appendChild(li);
+            });
+
+            updateChart(item.chart);
+        }
+
+        function updateChart(points) {
+            const ctx = document.getElementById('mainChart').getContext('2d');
+            
+            if(chartInstance) chartInstance.destroy();
+
+            chartInstance = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['Início', 'Hype', 'FOMO', 'Pico Máximo', 'Crash'],
+                    labels: ['Fase 1', 'Fase 2', 'Hype', 'ATH', 'Pânico', 'Crash'],
                     datasets: [{
-                        data: dataPoints,
-                        borderColor: '#ef4444', // Vermelho para dar ênfase ao crash
-                        backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                        borderWidth: 2,
-                        pointRadius: [0, 0, 0, 3, 3], // Mostrar pontos só no pico e no fim
+                        label: 'Valor de Mercado',
+                        data: points,
+                        borderColor: '#3b82f6',
+                        backgroundColor: (context) => {
+                            const chart = context.chart;
+                            const {ctx, chartArea} = chart;
+                            if (!chartArea) return null;
+                            const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+                            gradient.addColorStop(0, 'rgba(239, 68, 68, 0.2)');
+                            gradient.addColorStop(1, 'rgba(59, 130, 246, 0.2)');
+                            return gradient;
+                        },
+                        borderWidth: 4,
                         pointBackgroundColor: '#fff',
-                        fill: true,
-                        tension: 0.3
+                        pointRadius: 6,
+                        tension: 0.3,
+                        fill: true
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { display: false }, tooltip: { enabled: false } }, // Sem legendas para ficar super limpo
+                    plugins: { legend: { display: false } },
                     scales: {
-                        x: { display: false }, // Esconder eixo X
-                        y: { display: false }  // Esconder eixo Y
-                    },
-                    layout: { padding: 5 }
+                        y: { 
+                            grid: { color: '#161b22' },
+                            ticks: { color: '#484f58', font: { family: 'JetBrains Mono' } }
+                        },
+                        x: { 
+                            grid: { display: false },
+                            ticks: { color: '#484f58' }
+                        }
+                    }
                 }
             });
         }
+
+        // QUIZ LOGIC
+        function openQuiz() {
+            document.getElementById('main-view').classList.add('hidden');
+            document.getElementById('quiz-view').classList.remove('hidden');
+            
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = `
+                <div class="space-y-6">
+                    <div>
+                        <p class="text-xl font-bold mb-4">1. Recebes uma mensagem sobre uma "oportunidade única" com 2% de lucro ao dia garantido. Qual a tua reação?</p>
+                        <button onclick="quizAnswer(1, true)" class="w-full text-left p-4 rounded-xl border border-gray-700 hover:border-red-500 transition mb-2">Bloquear. É matematicamente impossível.</button>
+                        <button onclick="quizAnswer(1, false)" class="w-full text-left p-4 rounded-xl border border-gray-700 hover:border-blue-500 transition">Investir um pouco para ver se paga.</button>
+                    </div>
+                    <div id="q2" class="hidden">
+                        <p class="text-xl font-bold mb-4">2. Um projeto cripto não tem Whitepaper nem fundos auditados, mas tem um influencer famoso no YouTube. É seguro?</p>
+                        <button onclick="quizAnswer(2, true)" class="w-full text-left p-4 rounded-xl border border-gray-700 hover:border-red-500 transition mb-2">Não. Sem transparência técnica é quase certo ser um Rug Pull.</button>
+                        <button onclick="quizAnswer(2, false)" class="w-full text-left p-4 rounded-xl border border-gray-700 hover:border-blue-500 transition">Sim, se o influencer está a promover é porque é real.</button>
+                    </div>
+                    <div id="quiz-result" class="hidden text-center p-6 bg-blue-600 rounded-xl font-black text-2xl italic uppercase">
+                        Auditoria Concluída: Estás Protegido!
+                    </div>
+                </div>
+            `;
+        }
+
+        function quizAnswer(q, correct) {
+            if(!correct) {
+                alert("ERRADO! Acabaste de perder os teus fundos. Relembra os Sinais de Alerta na barra lateral.");
+                return;
+            }
+            if(q === 1) document.getElementById('q2').classList.remove('hidden');
+            if(q === 2) document.getElementById('quiz-result').classList.remove('hidden');
+        }
+
+        init();
     </script>
 </body>
 </html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desastres Financeiros: Crypto & Ações</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; color: #f8fafc; }
+        .hidden { display: none; }
+        .tab-active { border-bottom: 2px solid #3b82f6; color: #3b82f6; }
+    </style>
+</head>
+<body class="p-6">
+
+    <header class="max-w-5xl mx-auto mb-8 text-center">
+        <h1 class="text-4xl font-bold mb-4 text-blue-400">História dos Desastres Financeiros</h1>
+        <p class="text-slate-400">Aprende sobre os maiores Rug Pulls de Cripto e os maiores Crashes de Ações.</p>
+        
+        <nav class="mt-6 flex justify-center space-x-6 border-b border-slate-700 pb-2">
+            <button onclick="showTab('crypto')" id="btn-crypto" class="tab-active pb-2 font-semibold hover:text-blue-300 transition">Crypto Rug Pulls</button>
+            <button onclick="showTab('stocks')" id="btn-stocks" class="pb-2 font-semibold text-slate-400 hover:text-blue-300 transition">Crash de Ações</button>
+            <button onclick="showTab('quiz')" id="btn-quiz" class="pb-2 font-semibold text-slate-400 hover:text-blue-300 transition">Mini-Quiz</button>
+        </nav>
+    </header>
+
+    <main class="max-w-5xl mx-auto">
+        
+        <section id="crypto">
+            <h2 class="text-2xl font-bold mb-4">Os Maiores Rug Pulls & Fraudes</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-slate-800 p-6 rounded-lg shadow-lg">
+                    <h3 class="text-xl font-bold text-red-400">1. OneCoin ($4 Mil Milhões)</h3>
+                    <p class="text-slate-300 mt-2 text-sm">Um esquema Ponzi disfarçado de criptomoeda. Liderado por Ruja Ignatova ("Cryptoqueen"), que desapareceu em 2017. A moeda nunca teve uma blockchain real.</p>
+                    <canvas id="chartOneCoin" class="mt-4 w-full h-48"></canvas>
+                </div>
+                <div class="bg-slate-800 p-6 rounded-lg shadow-lg">
+                    <h3 class="text-xl font-bold text-red-400">2. BitConnect ($2.4 Mil Milhões)</h3>
+                    <p class="text-slate-300 mt-2 text-sm">Prometia retornos diários irreais usando um "bot de trading". Colapsou em 2018 após alertas de reguladores. O preço caiu de $463 para menos de $1 em dias.</p>
+                    <canvas id="chartBCC" class="mt-4 w-full h-48"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="stocks" class="hidden">
+            <h2 class="text-2xl font-bold mb-4">Quedas Históricas de Ações (Últimos 20 anos)</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-slate-800 p-6 rounded-lg shadow-lg">
+                    <h3 class="text-xl font-bold text-red-400">Lehman Brothers (2008)</h3>
+                    <p class="text-slate-300 mt-2 text-sm">O 4º maior banco de investimento dos EUA declarou falência devido à crise do subprime. As ações caíram de $86 para zero, desencadeando a crise global.</p>
+                    <canvas id="chartLehman" class="mt-4 w-full h-48"></canvas>
+                </div>
+                <div class="bg-slate-800 p-6 rounded-lg shadow-lg">
+                    <h3 class="text-xl font-bold text-red-400">Wirecard (2020)</h3>
+                    <p class="text-slate-300 mt-2 text-sm">Gigante alemã de pagamentos que falsificou as suas contas, declarando 1.9 mil milhões de euros que não existiam. As ações colapsaram 99% em poucos dias.</p>
+                    <canvas id="chartWirecard" class="mt-4 w-full h-48"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="quiz" class="hidden bg-slate-800 p-8 rounded-lg shadow-lg">
+            <h2 class="text-2xl font-bold mb-6">Mini-Quiz de Conhecimento</h2>
+            <form id="quizForm" onsubmit="submitQuiz(event)">
+                <div class="mb-4">
+                    <p class="font-semibold mb-2">1. O que é um "Rug Pull" em Cripto?</p>
+                    <label class="block text-slate-300"><input type="radio" name="q1" value="a" class="mr-2">Uma estratégia de investimento a longo prazo.</label>
+                    <label class="block text-slate-300"><input type="radio" name="q1" value="b" class="mr-2">Quando os criadores abandonam o projeto e fogem com o dinheiro.</label>
+                </div>
+                <div class="mb-6">
+                    <p class="font-semibold mb-2">2. Qual foi o principal motivo da queda do Lehman Brothers em 2008?</p>
+                    <label class="block text-slate-300"><input type="radio" name="q2" value="a" class="mr-2">A crise das hipotecas subprime (imobiliário).</label>
+                    <label class="block text-slate-300"><input type="radio" name="q2" value="b" class="mr-2">Um ataque de hackers aos seus servidores.</label>
+                </div>
+                <button type="submit" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-4 rounded transition">Ver Resultado</button>
+            </form>
+            <div id="quizResult" class="mt-4 text-xl font-bold hidden"></div>
+        </section>
+
+    </main>
+
+    <script>
+        // Função para alternar entre as abas
+        function showTab(tabName) {
+            document.getElementById('crypto').classList.add('hidden');
+            document.getElementById('stocks').classList.add('hidden');
+            document.getElementById('quiz').classList.add('hidden');
+            
+            document.getElementById('btn-crypto').classList.remove('tab-active', 'text-blue-400');
+            document.getElementById('btn-stocks').classList.remove('tab-active', 'text-blue-400');
+            document.getElementById('btn-quiz').classList.remove('tab-active', 'text-blue-400');
+            
+            document.getElementById(tabName).classList.remove('hidden');
+            document.getElementById('btn-' + tabName).classList.add('tab-active');
+            document.getElementById('btn-' + tabName).style.color = '#3b82f6';
+        }
+
+        // Função para desenhar os gráficos simulados
+        function drawChart(canvasId, label, dataPoints, color) {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Mês 1', 'Mês 2', 'Mês 3', 'Mês 4', 'Crash'],
+                    datasets: [{
+                        label: label,
+                        data: dataPoints,
+                        borderColor: color,
+                        backgroundColor: color + '33',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.1
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+
+        // Inicializar os Gráficos
+        window.onload = function() {
+            // Cripto: Gráficos de colapso rápido
+            drawChart('chartOneCoin', 'Valor Percebido ($)', [10, 50, 100, 200, 0], '#ef4444');
+            drawChart('chartBCC', 'Preço BitConnect ($)', [100, 250, 400, 463, 1], '#ef4444');
+            // Ações: Gráficos de colapso
+            drawChart('chartLehman', 'Ações Lehman ($)', [80, 85, 82, 60, 0.1], '#f59e0b');
+            drawChart('chartWirecard', 'Ações Wirecard (€)', [140, 135, 104, 90, 1], '#f59e0b');
+        };
+
+        // Lógica do Quiz
+        function submitQuiz(event) {
+            event.preventDefault();
+            let score = 0;
+            const q1 = document.querySelector('input[name="q1"]:checked');
+            const q2 = document.querySelector('input[name="q2"]:checked');
+
+            if (q1 && q1.value === 'b') score++;
+            if (q2 && q2.value === 'a') score++;
+
+            const resultDiv = document.getElementById('quizResult');
+            resultDiv.classList.remove('hidden');
+            
+            if (score === 2) {
+                resultDiv.innerText = "🎉 Perfeito! Acertaste 2/2. Estás pronto para sobreviver no mercado!";
+                resultDiv.className = "mt-4 text-xl font-bold text-green-400";
+            } else {
+                resultDiv.innerText = `Acertaste ${score}/2. Continua a estudar os mercados!`;
+                resultDiv.className = "mt-4 text-xl font-bold text-yellow-400";
+            }
+        }
+    </script>
+</body>
+</html>
